@@ -8,6 +8,13 @@ class CellphoneModel {
         $this->db = new PDO('mysql:host=localhost;' . 'dbname=db_celulares;charset=utf8', 'root', '');
     }
 
+    function getRowsNumber(){
+        $query = $this->db->prepare("SELECT COUNT(*) total_celulares FROM celular");
+        $query->execute();
+        $total = $query->fetchColumn();
+        return $total;
+    }
+
     public function getAllCellphones($sort = null, $order = null, $brand = null, $limit = null, $offset = null) {
         if(!empty($sort) && !empty($order)){
             $query = $this->db->prepare("SELECT * FROM celular ORDER BY $sort $order");

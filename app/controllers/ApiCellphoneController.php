@@ -22,14 +22,49 @@ class ApiCellphoneController {
     public function getAllCellphones($params = null) {
 
         if(isset($_GET['sort']) || isset($_GET['order'])){
-            $cellphones = $this->model->getAllCellphones($_GET['sort'], $_GET['order']);
-            $this->view->response($cellphones);
+
+            $sort = $_GET['sort'];
+            $order = $_GET['order'];
+            
+            if (($sort == 'id_celular' || $sort == 'modelo' || $sort == 'precio'
+            || $sort == 'id_marca') && ($order == 'asc' || $order == 'desc' 
+            || $order == 'ASC' || $order == 'DESC')) {
+
+                $cellphones = $this->model->getAllCellphones($sort, $order);
+                $this->view->response($cellphones);
+
+            } else { 
+                $this->view->response("El campo a ordenar no existe o no se puede ordenar", 400);
+            }
+
         } else if(isset($_GET['limit']) && isset($_GET['offset'])){
-            $cellphones = $this->model->getAllCellphones(null, null, null, $_GET['limit'], $_GET['offset']);
-            $this->view->response($cellphones);
+
+            $limit = $_GET['limit'];
+            $offset = $_GET['offset'];
+
+            $cellphones = $this->model->getAllCellphones(null, null, null, $limit, $offset);
+            $limitMAX= $this->model->getRowsNumber();
+
+            if($limit > $limitMAX) {
+                $this->view->response("limit excede el numero de celulares", 400);
+            } else if($cellphones){
+                $this->view->response($cellphones);
+            } else {
+                $this->view->response("No hay más celulares", 400);
+            }
+
         } else if(isset($_GET['id_marca'])){
-            $cellphones = $this->model->getAllCellphones(null, null, $_GET['id_marca']);
-            $this->view->response($cellphones);
+
+            $brand = $_GET['id_marca'];
+
+            $cellphones = $this->model->getAllCellphones(null, null, $brand);
+
+            if($cellphones){
+                $this->view->response($cellphones);
+            } else {
+                $this->view->response("No existe id_marca=$brand", 400);
+            }
+
         } else{
             $cellphones = $this->model->getAllCellphones();
             $this->view->response($cellphones);
@@ -41,7 +76,6 @@ class ApiCellphoneController {
         $id = $params[':ID'];
         $cellphone = $this->model->getCellphone($id);
 
-        // si no existe devuelvo 404
         if ($cellphone)
             $this->view->response($cellphone);
         else 
