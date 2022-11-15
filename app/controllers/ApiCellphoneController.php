@@ -20,56 +20,41 @@ class ApiCellphoneController {
     }
 
     public function getAllCellphones($params = null) {
-
-        if(isset($_GET['sort']) || isset($_GET['order'])){
-
-            $sort = $_GET['sort'];
-            $order = $_GET['order'];
-            
-            if (($sort == 'id_celular' || $sort == 'modelo' || $sort == 'precio'
-            || $sort == 'id_marca') && ($order == 'asc' || $order == 'desc' 
-            || $order == 'ASC' || $order == 'DESC')) {
-
-                $cellphones = $this->model->getAllCellphones($sort, $order);
-                $this->view->response($cellphones);
-
-            } else { 
-                $this->view->response("El campo a ordenar no existe o no se puede ordenar", 400);
-            }
-
-        } else if(isset($_GET['limit']) && isset($_GET['offset'])){
-
-            $limit = $_GET['limit'];
-            $offset = $_GET['offset'];
-
-            $cellphones = $this->model->getAllCellphones(null, null, null, $limit, $offset);
-            $limitMAX= $this->model->getRowsNumber();
-
-            if($limit > $limitMAX) {
-                $this->view->response("limit excede el numero de celulares", 400);
-            } else if($cellphones){
-                $this->view->response($cellphones);
-            } else {
-                $this->view->response("No hay más celulares", 400);
-            }
-
-        } else if(isset($_GET['id_marca'])){
-
-            $brand = $_GET['id_marca'];
-
-            $cellphones = $this->model->getAllCellphones(null, null, $brand);
+           
+            $brand = $_GET['id_marca'] ?? null;
+            $sort = $_GET['sort'] ?? null;
+            $order = $_GET['order'] ?? null;
+            $limit = $_GET['limit'] ?? null;
+            $offset = $_GET['offset'] ?? null;
+    
+            $cellphones = $this->model->getAllCellphones($brand, $sort, $order, $limit, $offset);
+           
+            $response = ""; 
 
             if($cellphones){
                 $this->view->response($cellphones);
             } else {
-                $this->view->response("No existe id_marca=$brand", 400);
-            }
-
-        } else{
-            $cellphones = $this->model->getAllCellphones();
-            $this->view->response($cellphones);
-        } 
+                if(isset($brand)){
+                    $response .= " No existe id_marca=$brand -";
+                }
+                if((isset($sort) || isset($order)) && ($sort != 'id_celular' || $sort != 'modelo' || $sort != 'precio'
+                || $sort != 'id_marca') && ($order != 'asc' || $order != 'desc' 
+                || $order != 'ASC' || $order != 'DESC')){
+                    $response .= " El campo a ordenar no existe o no se puede ordenar -";
+                }
+                if(isset($limit) && isset($offset)){
+                    $limitMAX= $this->model->getRowsNumber();
+                    if($limit > $limitMAX) {
+                        $response .= " limit excede el numero de celulares -";
+                    } else {
+                        $response .= " No hay más celulares ";
+                    }
+                }
+                $this->view->response($response, 400);
+            
+        }
     }
+
 
     public function getCellphone($params = null) {
         // obtengo el id del arreglo de params

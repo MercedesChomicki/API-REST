@@ -15,25 +15,26 @@ class CellphoneModel {
         return $total;
     }
 
-    public function getAllCellphones($sort = null, $order = null, $brand = null, $limit = null, $offset = null) {
+    public function getAllCellphones($brand = null, $sort = null, $order = null, $limit = null, $offset = null) {
+        
+        $query = "SELECT * FROM celular";
+        
+        if (!empty($brand)) {
+            $query .= " WHERE id_marca = $brand";
+        }
         if(!empty($sort) && !empty($order)){
-            $query = $this->db->prepare("SELECT * FROM celular ORDER BY $sort $order");
-            $query->execute();
-            return $query->fetchAll(PDO::FETCH_OBJ);
-        } else  if(!empty($limit) && (!empty($offset) || $offset == 0)){
-            $query = $this->db->prepare("SELECT * FROM celular LIMIT $limit OFFSET $offset");
-            $query->execute();
-            return $query->fetchAll(PDO::FETCH_OBJ);
-        } else if(!empty($brand)){
-            $query = $this->db->prepare("SELECT * FROM celular WHERE id_marca = $brand");
-            $query->execute();
-            return $query->fetchAll(PDO::FETCH_OBJ);
-        } else {
-            $query = $this->db->prepare("SELECT * FROM celular");
-            $query->execute();
-            return $query->fetchAll(PDO::FETCH_OBJ);
-        }   
+            $query .= " ORDER BY $sort $order";
+        }
+        if(!empty($limit) && (!empty($offset) || $offset == 0)){
+            $query .= " LIMIT $limit OFFSET $offset";
+        }
+       
+        $sentence = $this->db->prepare($query);
+        $sentence->execute();
+        return $sentence->fetchAll(PDO::FETCH_OBJ);
     }
+
+
 
     public function getCellphone($id) {
         $query = $this->db->prepare('SELECT * FROM celular WHERE id_celular = ?');
