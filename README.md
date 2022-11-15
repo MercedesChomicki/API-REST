@@ -1,6 +1,6 @@
 # API RESTful de celulares :iphone:
-***
-Una API REST sencilla para manejar un CRUD de celulares, los cuales pueden ser filtrados por categoria y ordenados por algunos de sus campos de manera ascendente o descendente.
+---
+* Una API REST sencilla para manejar un CRUD de celulares, los cuales pueden ser filtrados por categoria y ordenados por algunos de sus campos de manera ascendente o descendente.
 ---
 ## Requerimientos :warning: 
 * Importar desde PHPMyAdmin (o cualquiera otra) la base de datos database/db_celulares.sql
@@ -50,34 +50,34 @@ Una API REST sencilla para manejar un CRUD de celulares, los cuales pueden ser f
 * Con el method:POST agregamos un celular nuevo: 
 * POST/celulares
 
-{
-    "modelo": "Modelo",
-    "precio": precio,
-    "descripcion": "Descripcion",
-    "id_marca": #,
-    "Imagen": "url"
-}
+> {
+>    "modelo": "Modelo",
+>    "precio": precio,
+>    "descripcion": "Descripcion",
+>    "id_marca": #,
+>    "Imagen": "url"
+> }
 
 ##### Aclaracion:
 * id_marca:
-1. Samsung
-2. Apple
-3. Motorola
-4. Xiaomi
-5. LG
-6. Xiaomi
+> 1. Samsung
+> 2. Apple
+> 3. Motorola
+> 4. Xiaomi
+> 5. LG
+> 6. Xiaomi
 
 ### PUT (Requiere Autenticación)
 * Con el method:PUT actualizamos/editamos el celular deseado con su correspondiente id: 
 * PUT/celulares/:ID
 
-{
-    "modelo": "Modelo actualizado",
-    "precio": precio actualizado,
-    "descripcion": "Descripcion actualizada",
-    "id_marca": #,
-    "Imagen": "url actualizada"
-}
+> {
+>    "modelo": "Modelo actualizado",
+>    "precio": precio actualizado,
+>    "descripcion": "Descripcion actualizada",
+>    "id_marca": #,
+>    "Imagen": "url actualizada"
+> }
 ---
 ## Autenticación
 * Para realizar POST, PUT y DELETE, necesitamos la previa autenticación:
