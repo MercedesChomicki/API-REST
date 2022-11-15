@@ -2,10 +2,13 @@
 ***
 Una API REST sencilla para manejar un CRUD de celulares, los cuales pueden ser filtrados por categoria y ordenados por algunos de sus campos de manera ascendente o descendente.
 
-## Requerimientos
+## Requerimientos :warning: 
 * Importar desde PHPMyAdmin (o cualquiera otra) la base de datos database/db_celulares.sql
 
-## :hammer: Funcionalidades del proyecto
+## Intenta con postman
+* El endpoint de la API es: http://localhost/tucarpetalocal/API-REST/api/celulares
+
+## Funcionalidades del proyecto :hammer: 
 
 ### GET
 #### Obtener un celular especifico
@@ -52,14 +55,14 @@ http://localhost/web2/API-REST/api/celulares?limit=6&offset=6 -> va del celular 
     "Imagen": "url"
 }
 
-###### Aclaracion:
-* id_marca
-1. 1: Samsung
-2. 2: Apple
-3. 3: Motorola
-4. 4: Xiaomi
-5. 5: LG
-6. 6: Xiaomi
+##### Aclaracion:
+* id_marca:
+1. Samsung
+2. Apple
+3. Motorola
+4. Xiaomi
+5. LG
+6. Xiaomi
 
 ### PUT
 * Con el method:PUT actualizamos/editamos el celular deseado con su correspondiente id: 
@@ -72,5 +75,3 @@ http://localhost/web2/API-REST/api/celulares?limit=6&offset=6 -> va del celular 
     "id_marca": #,
     "Imagen": "url actualizada"
 }
-
-### Pueba con postman el endpoint de la API es: http://localhost/tucarpetalocal/API-REST/api/celulares
