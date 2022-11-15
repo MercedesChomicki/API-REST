@@ -1,17 +1,19 @@
 <?php
 require_once './app/models/CellphoneModel.php';
 require_once './app/views/ApiView.php';
+require_once './app/helpers/AuthApiHelper.php';
 
-class ApiCellphoneController {
+class CellphoneApiController {
     private $model;
     private $view;
+    private $authHelper;
     private $data;
 
     public function __construct() {
         $this->model = new CellphoneModel();
         $this->view = new ApiView();
+        $this->authHelper = new AuthApiHelper();
         
-        // lee el body del request
         $this->data = file_get_contents("php://input");
     }
 
@@ -57,7 +59,6 @@ class ApiCellphoneController {
 
 
     public function getCellphone($params = null) {
-        // obtengo el id del arreglo de params
         $id = $params[':ID'];
         $cellphone = $this->model->getCellphone($id);
 
@@ -70,6 +71,11 @@ class ApiCellphoneController {
     public function deleteCellphone($params = null) {
         $id = $params[':ID'];
 
+        if(!$this->authHelper->isLoggedIn()){
+            $this->view->response("No estas logueado", 401);
+            return;
+        }
+
         $cellphone = $this->model->getCellphone($id);
         if ($cellphone) {
             $this->model->deleteCellphone($id);
@@ -80,6 +86,11 @@ class ApiCellphoneController {
 
     public function insertCellphone() {
         $cellphone = $this->getData();
+
+        if(!$this->authHelper->isLoggedIn()){
+            $this->view->response("No estas logueado", 401);
+            return;
+        }
 
         if (empty($cellphone->modelo) || empty($cellphone->precio) || empty($cellphone->descripcion) || empty($cellphone->id_marca) || empty($cellphone->Imagen)) {
             $this->view->response("Complete los datos", 400);
@@ -93,6 +104,11 @@ class ApiCellphoneController {
     public function updateCellphone($params = null) {
         $id = $params[':ID'];
         $body = $this->getData();
+
+        if(!$this->authHelper->isLoggedIn()){
+            $this->view->response("No estas logueado", 401);
+            return;
+        }
 
         $cellphone = $this->model->getCellphone($id);
         if ($cellphone) {
